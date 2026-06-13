@@ -1,111 +1,115 @@
-# Bookkeeping 1.0
+# 记账系统 1.0
 
-A lightweight bookkeeping system for three role types:
+这是一个面向三类角色的轻量级记账系统：
 
-- `开发人员`：system administration and audit only
-- `Boss`：organization-level management and reporting
-- `项目主管`：daily bookkeeping within own scope
+- `开发人员`：只负责系统管理、审计和排查
+- `Boss`：负责组织级管理和账目查看
+- `项目主管`：负责自己范围内的日常记账
 
-This repository is the 1.0 release-ready project copy for local testing, GitHub sync, and Tencent Cloud deployment.
+这个仓库是已经整理好的 `1.0` 发布副本，适合用于：
 
-## Core capabilities
+- 本地启动测试
+- 同步到 GitHub
+- 部署到腾讯云服务器
 
-- natural-language bookkeeping input
-- role-based record visibility
-- Boss report views and filtering
-- project leader self-scope bookkeeping
-- developer/admin account management and audit support
-- Excel export
-- database migration and release verification helpers
+## 主要功能
 
-## Project structure
+- 自然语言记账输入
+- 按角色控制账单查看权限
+- Boss 视角报表与筛选
+- 项目主管个人范围记账
+- 开发人员账号管理与审计支持
+- Excel 导出
+- 数据库迁移与发布校验脚本
 
-- `main.py`: FastAPI backend entry
-- `database.py`: SQLite schema, migration, and business persistence logic
-- `static/`: frontend page assets
-- `data/`: project memory files, verification scripts, and runtime data directory
-- `start.bat`: Windows local startup helper
-- `start.sh`: Linux/Tencent Cloud startup helper
-- `deploy_update.sh`: server-side update script
-- `rollback_data.sh`: data rollback helper
-- `DEPLOY.md`: deployment and update notes
+## 项目结构
 
-## Local development
+- `main.py`：FastAPI 后端入口
+- `database.py`：SQLite 数据库、迁移逻辑和核心持久化逻辑
+- `static/`：前端页面资源
+- `data/`：项目记忆文件、校验脚本、运行数据目录
+- `start.bat`：Windows 本地启动脚本
+- `start.sh`：Linux / 腾讯云启动脚本
+- `deploy_update.sh`：服务器更新脚本
+- `rollback_data.sh`：数据回滚脚本
+- `DEPLOY.md`：部署与更新说明
 
-Windows local startup:
+## 本地开发启动
+
+Windows 本地启动：
 
 ```bash
 start.bat
 ```
 
-What it does:
+启动流程会自动完成：
 
-1. finds a usable Python runtime
-2. creates `venv` if needed
-3. installs requirements
-4. checks local port usage
-5. starts the backend
-6. waits for `/api/health`
+1. 查找可用 Python 环境
+2. 缺少 `venv` 时自动创建
+3. 安装并校验依赖
+4. 检查本地端口占用
+5. 启动后端服务
+6. 等待 `/api/health` 返回成功
 
-## Production deployment
+## 生产部署方式
 
-Recommended production mode:
+推荐生产环境使用方式：
 
-- Linux / Tencent Cloud
+- Linux / 腾讯云服务器
 - `systemd` + `bookkeeping.service`
-- `start.sh` for backend startup
-- persistent `data/` directory
+- 用 `start.sh` 启动后端
+- `data/` 目录长期保留
 
-Default production port in this release copy:
+这个发布副本当前默认生产端口为：
 
 - `8091`
 
-See full deployment notes here:
+完整部署说明见：
 
 - `DEPLOY.md`
 
-## Release and update flow
+## 发布与更新流程
 
-Recommended release flow:
+推荐使用下面这套流程：
 
-1. test locally
-2. sync to GitHub
-3. deploy from GitHub to Tencent Cloud
-4. keep server `data/` persistent during upgrades
-5. run release verification after update
+1. 本地测试
+2. 同步到 GitHub
+3. 从 GitHub 部署到腾讯云
+4. 更新时保留服务器原有 `data/` 目录
+5. 更新完成后执行发布校验
 
-Release verification entry:
+统一发布校验入口：
 
 ```bash
 python data/verify_release_gate.py
 ```
 
-This verifies:
+这个校验会检查：
 
-- startup health
-- organization isolation
-- schema readiness
-- post-upgrade read/write checks
-- running balance behavior
-- export backend readiness
+- 启动健康状态
+- 组织隔离是否正常
+- 数据库结构是否就绪
+- 升级后读写是否正常
+- 余额时间线规则是否正确
+- 导出能力是否正常
 
-## Database safety
+## 数据库安全说明
 
-The backend includes migration safety for iterative releases:
+后端已经包含面向迭代发布的数据库保护机制：
 
-- core-table readiness checks
-- migration path for older schemas
-- required-column validation
-- migration backup support
-- release-gate verification scripts
+- 核心表就绪检查
+- 旧版本数据库迁移路径
+- 关键字段完整性校验
+- 迁移前备份支持
+- 发布闸门校验脚本
 
-Important rule:
+重要原则：
 
-- do not commit runtime database files, logs, or SQLite lock files to GitHub
+- 不要把运行中的数据库、日志文件、SQLite 锁文件提交到 GitHub
 
-## Files that should not be uploaded as runtime artifacts
+## 不应上传到 Git 的运行产物
 
-Examples of local runtime leftovers that should stay out of git:
+下面这些文件或目录属于本地运行残留，不应进入 Git：
 
 - `data/bookkeeping.db`
 - `data/*.db-wal`
@@ -115,10 +119,12 @@ Examples of local runtime leftovers that should stay out of git:
 - `data/backups/`
 - `__pycache__/`
 
-## Notes
+## 备注
 
-- This project copy is intended to be clean before GitHub sync.
-- First-install boot and old-database upgrade boot were both verified during the 1.0 release cleanup work.
-- If you change schema or role logic in later versions such as 1.1+, repeat both checks:
-  - fresh empty-data startup check
-  - old-database upgrade startup check
+- 这个发布副本在同步到 GitHub 前应保持干净状态。
+- `1.0` 收口过程中，已经验证过：
+  - 空数据首次启动可以正常完成
+  - 旧版数据库接入新版后可以继续运行
+- 如果后续做 `1.1`、`1.2` 等版本，并且涉及数据库结构或角色逻辑调整，建议继续重复这两类检查：
+  - 空数据首次启动检查
+  - 旧数据库升级启动检查
