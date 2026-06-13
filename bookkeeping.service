@@ -1,0 +1,18 @@
+﻿[Unit]
+Description=Bookkeeping FastAPI Service
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/bookkeeping
+Environment=APP_HOST=0.0.0.0
+Environment=APP_PORT=8091
+ExecStart=/opt/bookkeeping/start.sh
+Restart=always
+RestartSec=3
+User=www-data
+Group=www-data
+
+[Install]
+WantedBy=multi-user.target
+

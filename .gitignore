@@ -1,0 +1,21 @@
+venv/
+venv_broken_20260607/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+data/*.log
+data/*.txt
+data/backups/
+data/exports/
+data/bookkeeping.db
+data/_verify_tmp/
+data/__pycache__/
+data/*.sqlite
+data/*.sqlite3
+data/*.db
+
+# verification and maintenance scripts in `data/` are now part of the
+# deployment safety workflow and should stay visible to git.
+
+# Allow checked-in env/config secrets if you explicitly keep them in repo.
