@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env bash
+#!/usr/bin/env bash
 set -euo pipefail
 
 BASE_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -16,4 +16,3 @@ if [[ ! -x "$PYTHON_BIN" ]]; then
 fi
 
 exec "$PYTHON_BIN" -m uvicorn main:app --host "$HOST" --port "$PORT"
-

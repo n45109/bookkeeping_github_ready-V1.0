@@ -1,4 +1,4 @@
-﻿[Unit]
+[Unit]
 Description=Bookkeeping FastAPI Service
 After=network.target
 
@@ -15,4 +15,3 @@ Group=www-data
 
 [Install]
 WantedBy=multi-user.target
-

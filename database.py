@@ -165,6 +165,8 @@ def ensure_db_ready(conn):
     if has_required_tables(conn) and not schema_needs_migration(conn):
         validate_core_schema(conn)
         return
+    prepare_database(conn)
+    conn.commit()
 
 
 # ========== 初始化 / 迁移 ==========
@@ -512,6 +514,7 @@ def create_organization(name: str, owner_user_id=None) -> dict:
         "INSERT INTO organizations (name, owner_user_id) VALUES (?, ?)",
         (name, owner_user_id),
     )
+    conn.commit()
     organization_id = cur.lastrowid
     conn.close()
     return get_organization(organization_id)
@@ -578,6 +581,7 @@ def normalize_organization_names():
                 "UPDATE organizations SET name = ? WHERE id = ?",
                 (DEFAULT_ORGANIZATION_NAME, row["id"]),
             )
+    conn.commit()
     conn.close()
 
 
